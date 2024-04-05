@@ -1,0 +1,1 @@
+cmd_/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/tools/icu/icuuc.stamp := touch /home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/tools/icu/icuuc.stamp

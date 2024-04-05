@@ -1,0 +1,13 @@
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/default-foreground-task-runner.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/default-job.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/default-platform.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/default-thread-isolated-allocator.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/default-worker-threads-task-runner.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/delayed-task-queue.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/task-queue.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/tracing/trace-buffer.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/tracing/trace-config.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/tracing/trace-object.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/tracing/trace-writer.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/tracing/tracing-controller.o
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/v8_libplatform/deps/v8/src/libplatform/worker-thread.o

@@ -1,0 +1,6 @@
+cmd_/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/cares/deps/cares/src/tools/ares_getopt.o := cc -o /home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/cares/deps/cares/src/tools/ares_getopt.o ../deps/cares/src/tools/ares_getopt.c '-D_GLIBCXX_USE_CXX11_ABI=1' '-DNODE_OPENSSL_CONF_NAME=nodejs_conf' '-DNODE_OPENSSL_HAS_QUIC' '-DICU_NO_USER_DATA_OVERRIDE' '-D_DARWIN_USE_64_BIT_INODE=1' '-D_LARGEFILE_SOURCE' '-D_FILE_OFFSET_BITS=64' '-D_GNU_SOURCE' '-D__STDC_FORMAT_MACROS' '-DOPENSSL_NO_PINSHARED' '-DOPENSSL_THREADS' '-DCARES_STATICLIB' '-DHAVE_CONFIG_H' -I../deps/cares/include -I../deps/cares/config/linux  -pthread -Wall -Wextra -Wno-unused-parameter -g -pedantic -Wall -Wextra -Wno-unused-parameter --std=gnu11 -m64 -O3 -fno-omit-frame-pointer  -MMD -MF /home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/.deps//home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/cares/deps/cares/src/tools/ares_getopt.o.d.raw   -c
+/home/penjud/vscode_projects/automation1V2/node/node-v21.7.2/out/Release/obj.target/cares/deps/cares/src/tools/ares_getopt.o: \
+ ../deps/cares/src/tools/ares_getopt.c \
+ ../deps/cares/src/tools/ares_getopt.h
+../deps/cares/src/tools/ares_getopt.c:
+../deps/cares/src/tools/ares_getopt.h:

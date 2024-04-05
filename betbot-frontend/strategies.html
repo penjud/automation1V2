@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategies</title>
+</head>
+<body>
+  <h1>Strategies</h1>
+  <br>
+  <div id="accountFunds"></div>
+  <br>
+  <div id="apiStatus"></div>
+  <br>
+  <label for="strategyName">Name of strategy:</label>
+  <input type="text" id="strategyName" name="strategyName" maxlength="25">
+  <br>
+  <br>
+  <label for="country">Country:</label>
+  <select id="country" name="country">
+    <option value="AU">AU</option>
+    <option value="GB">GB</option>
+  </select>
+  <br>
+  <br>
+  <label for="sport">Sports:</label>
+  <select id="sport" name="sport">
+    <option value="horse-racing">Horse Racing</option>
+    <option value="greyhound-racing">Greyhound Racing</option>
+  </select>
+  <br>
+  <br>
+  <h2>Races</h2>
+  <div id="raceList">
+    <!-- Race list will be dynamically populated -->
+  </div>
+  <br>
+  <script src="funds.js"></script>
+  <script src="api_status.js"></script>
+</body>
+</html>
