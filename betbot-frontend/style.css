@@ -1,13 +1,13 @@
 .App {
     text-align: center;
     padding: 20px;
-    background-color: #111111; /* Light grey background */
+    background-color: #000000; /* Light grey background */
     font-family: 'Arial', sans-serif; /* Set a clean, readable font */
-    color: rgb(12, 15, 156); /* Default text color set to yellow */
+    color: rgb(238, 223, 11); /* Default text color set to yellow */
   }
   
   h1, h2, h3, h4, h5, h6 {
-    color: rgb(231, 66, 182); /* All header elements (h1-h6) will be orange */
+    color: rgb(243, 112, 5); /* All header elements (h1-h6) will be orange */
   }
   
   button {
@@ -27,7 +27,7 @@
   }
   
   .bot-running {
-    color: green;
+    color: rgb(3, 243, 3);
   }
   
   .bot-stopped {
@@ -55,7 +55,7 @@
   }
   
   .connected {
-    color: green;
+    color: rgb(5, 248, 5);
   }
   
   .disconnected {

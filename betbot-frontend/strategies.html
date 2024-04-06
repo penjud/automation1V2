@@ -7,13 +7,14 @@
   <title>Strategies</title>
 </head>
 <body>
+  <div class="App">
   <h1>Strategies</h1>
   <br>
+  <script src="funds.js"></script>
   <div id="accountFunds"></div>
   <br>
   <div id="apiStatus"></div>
   <br>
-  <div id="botStatus" class="bot-status bot-stopped">Bot is not running</div>
   <br>
   <label for="strategyName">Strategy:</label>
   <input type="text" id="strategyName" name="strategyName" maxlength="25">
@@ -42,14 +43,13 @@
   </div>
   <br>
   <br>
-  <div id="raceInfo">
-    <h2>Race Information</h2>
-    <div id="races"></div>
+  <div id="raceInfo"></div>
+  <h2>Race Information</h2>
+  <div id="raceList"></div>
   </div>
   <br>
-  <script src="funds.js"></script>
   <script src="api_status.js"></script>
-  <script src="start_bot.js"></script>
   <script src="races.js"></script>
+</div>
 </body>
 </html>

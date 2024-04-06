@@ -36,6 +36,14 @@ class BetfairClient:
                 return False
             raise
 
+    def is_connected(self):
+        try:
+            self.client.keep_alive()
+            return True
+        except betfairlightweight.exceptions.APIError as e:
+            logger.error(f"API connection check failed: {e}")
+            return False
+        
     def refresh_session_token(self):
         self.client.logout()
         self.session_token = self.client.login()
@@ -85,6 +93,22 @@ class BetfairClient:
             return account_info.available_to_bet_balance
         except Exception as e:
             logger.error(f"Failed to retrieve account funds: {e}")
+            return None
+    
+    def get_races_by_event_type_and_country(self, event_type_id, country_code, market_count):
+        try:
+            market_filter = MarketFilter(
+                event_type_ids=[event_type_id],
+                market_countries=[country_code],
+                market_type_codes=['WIN'],
+                in_play_only=False,
+                market_count=market_count
+            )
+
+            racing_events = self.betting.list_events(filter=market_filter)
+            return racing_events
+        except Exception as e:
+            logger.error(f"Failed to retrieve races: {e}")
             return None
 
 def get_betfair_client():

@@ -7,12 +7,12 @@ from betfairlightweight import APIClient
 from betfairlightweight.filters import streaming_market_filter
 from dotenv import load_dotenv
 from flask_cors import CORS
-from betfairlightweight import exceptions as bf_exceptions
 import threading
 import requests
 from flask import request
 from betfair_client import BetfairClient
 from datetime import datetime
+import betfairlightweight.exceptions
 
 # Load environment variables
 load_dotenv()
@@ -116,47 +116,34 @@ def get_bot_status():
 
 @app.route('/api/check-connection', methods=['GET'])
 def check_connection():
-    if betfair_client.session_expired:
-        betfair_client.refresh_session_token()
-        return jsonify({"status": "Session refreshed successfully."}), 200
-    else:
-        return jsonify({"status": "Session is still valid."}), 200
+        connected = betfair_client.is_connected()
+        return jsonify({'connected': connected})
 
 @app.route('/api/account-funds', methods=['GET'])
 def get_account_funds():
-    if not betfair_client.is_token_valid():
-        betfair_client.refresh_session_token()
-
-    account_funds = betfair_client.get_account_funds()
-    if account_funds is not None:
-        # Convert AccountFunds object to a dictionary
-        account_funds_dict = {
-            'available_to_bet_balance': account_funds
-        }
-        return jsonify(account_funds_dict)
-    else:
+    try:
+        # Directly obtain the account funds balance as a float.
+        account_funds_balance = betfair_client.get_account_funds()
+        # Return the balance in the expected JSON format.
+        return jsonify({'available_to_bet_balance': account_funds_balance})
+    except Exception as e:
+        logging.error('Error fetching account funds:', exc_info=True)
         return jsonify({'error': 'Failed to retrieve account funds'}), 500
     
 @app.route('/api/races', methods=['GET'])
 def get_races():
     event_type_id = request.args.get('eventTypeId')
     country_code = request.args.get('countryCode')
-
-    navigation_url = "https://api.betfair.com/exchange/betting/rest/v1/en/navigation/menu.json"  
-    cert_file = "certs/client-2048.crt"  
-    key_file = "certs/client-2048.key" 
-
-    url = f'{navigation_url}{event_type_id}/{country_code}'
-    print(f'Making API request to: {url}')  # Log the API request URL
-
-    response = requests.get(url, cert=(cert_file, key_file))
-
-    if response.status_code == 200:
-        data = response.json()
-        print(f'API response data: {data}')  # Log the API response data
-        return jsonify(data)
-    else:
-        print(f'API request failed with status code: {response.status_code}')  # Log the error status code
+    market_count = request.args.get('marketCount', default=10, type=int)  # Default to 10 markets if not provided
+    
+    try:
+        races = betfair_client.get_races_by_event_type_and_country(event_type_id, country_code, market_count)
+        if races:
+            return jsonify(races), 200
+        else:
+            return jsonify({'error': 'No races found'}), 404
+    except Exception as e:
+        logger.error(f"Error fetching races: {e}")
         return jsonify({'error': 'Failed to fetch races'}), 500
     
 @app.route('/api/races-for-date', methods=['GET'])
@@ -186,6 +173,9 @@ def get_formatted_races():
     market_count = request.args.get('marketCount', default=10, type=int)
     selected_date = request.args.get('date')
 
+    # Log the input parameters
+    logger.info(f"Fetching races for country_code: {country_code}, event_type_id: {event_type_id}, market_count: {market_count}, selected_date: {selected_date}")
+
     # Convert the selected date to the desired format
     selected_date = datetime.strptime(selected_date, '%Y-%m-%d').strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -200,10 +190,12 @@ def get_formatted_races():
                 'market_count': len(race.market_ids)
             }
             formatted_races.append(race_details)
+        # Log the formatted races before returning
+        logger.info(f"Formatted races: {formatted_races}")
         return jsonify(formatted_races), 200
     else:
+        logger.error("Failed to retrieve races")
         return jsonify({'error': 'Failed to retrieve races'}), 500
-
 
 if __name__ == "__main__":
     logger.info("Starting the server...")

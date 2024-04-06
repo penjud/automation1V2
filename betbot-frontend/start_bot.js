@@ -1,5 +1,14 @@
 var API_BASE_URL = 'http://localhost:5000'; // Update with your backend server URL
 
+function updateBotStatus(text, className) {
+  const statusElement = document.getElementById('botStatus');
+  if (statusElement) {
+      statusElement.textContent = text;
+      statusElement.classList.remove('bot-running', 'bot-stopped');
+      statusElement.classList.add(className);
+  }
+}
+
 function startBot() {
   fetch(API_BASE_URL + '/start', { method: 'POST' })
     .then(response => {
@@ -15,11 +24,6 @@ function startBot() {
       console.error('Error starting bot:', error);
       updateBotStatus('Bot is not running', 'bot-stopped');
     });
-  const statusElement = document.getElementById('botStatus');
-  if (statusElement) {
-      statusElement.textContent = 'Bot is running';
-      statusElement.style.color = 'green';
-  }
 }
 
 function stopBot() {
@@ -37,33 +41,26 @@ function stopBot() {
       console.error('Error stopping bot:', error);
       updateBotStatus('Bot is not running', 'bot-stopped');
     });
-  const statusElement = document.getElementById('botStatus');
-  if (statusElement) {
-      statusElement.textContent = 'Bot is not running';
-      statusElement.style.color = 'red';
-  }
 }
 
-// start_bot.js
-function updateBotStatus() {
+// The below function fetches bot status from the server
+function fetchBotStatus() {
   fetch(API_BASE_URL + '/bot-status')
     .then(response => response.json())
     .then(data => {
-      const statusElement = document.getElementById('botStatus');
       if (data.is_running) {
-        statusElement.textContent = 'Bot is running';
-        statusElement.classList.remove('bot-stopped');
-        statusElement.classList.add('bot-running');
+        updateBotStatus('Bot is running', 'bot-running');
       } else {
-        statusElement.textContent = 'Bot is not running';
-        statusElement.classList.remove('bot-running');
-        statusElement.classList.add('bot-stopped');
+        updateBotStatus('Bot is not running', 'bot-stopped');
       }
     })
     .catch(error => {
-      console.error('Error updating bot status:', error);
+      console.error('Error fetching bot status:', error);
     });
 }
 
-// Call updateBotStatus when the page loads and after starting/stopping the bot
-document.addEventListener('DOMContentLoaded', updateBotStatus);
+// Call fetchBotStatus when the page loads and after starting/stopping the bot
+document.addEventListener('DOMContentLoaded', fetchBotStatus);
+
+// Call fetchBotStatus after starting/stopping the bot to reflect the new status
+// Consider using event listeners or a callback pattern if you want this to trigger only after certain user actions.
