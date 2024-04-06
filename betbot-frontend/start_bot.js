@@ -44,8 +44,26 @@ function stopBot() {
   }
 }
 
-function updateBotStatus(message, statusClass) {
-  var botStatusElement = document.getElementById('botStatus');
-  botStatusElement.textContent = message;
-  botStatusElement.className = 'bot-status ' + statusClass;
+// start_bot.js
+function updateBotStatus() {
+  fetch(API_BASE_URL + '/bot-status')
+    .then(response => response.json())
+    .then(data => {
+      const statusElement = document.getElementById('botStatus');
+      if (data.is_running) {
+        statusElement.textContent = 'Bot is running';
+        statusElement.classList.remove('bot-stopped');
+        statusElement.classList.add('bot-running');
+      } else {
+        statusElement.textContent = 'Bot is not running';
+        statusElement.classList.remove('bot-running');
+        statusElement.classList.add('bot-stopped');
+      }
+    })
+    .catch(error => {
+      console.error('Error updating bot status:', error);
+    });
 }
+
+// Call updateBotStatus when the page loads and after starting/stopping the bot
+document.addEventListener('DOMContentLoaded', updateBotStatus);

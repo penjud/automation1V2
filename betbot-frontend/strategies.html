@@ -13,30 +13,43 @@
   <br>
   <div id="apiStatus"></div>
   <br>
-  <label for="strategyName">Name of strategy:</label>
+  <div id="botStatus" class="bot-status bot-stopped">Bot is not running</div>
+  <br>
+  <label for="strategyName">Strategy:</label>
   <input type="text" id="strategyName" name="strategyName" maxlength="25">
   <br>
   <br>
-  <label for="country">Country:</label>
-  <select id="country" name="country">
-    <option value="AU">AU</option>
-    <option value="GB">GB</option>
-  </select>
+  <div id="raceFilters">
+    <label for="countrySelect">Country:</label>
+    <select id="countrySelect">
+      <option value="GB">Great Britain</option>
+      <option value="IE">Ireland</option>
+      <option value="AU">Australia</option>
+      <!-- Add more country options as needed -->
+    </select>
+    <br>
+    <br>
+    <label for="dateSelect">Date:</label>
+    <input type="date" id="dateSelect">
+    <br>
+    <br>
+    <label for="sportSelect">Sport:</label>
+    <select id="sportSelect">
+      <option value="7">Horse Racing</option>
+      <option value="4339">Greyhound Racing</option>
+      <!-- Add more sport options as needed -->
+    </select>
+  </div>
   <br>
   <br>
-  <label for="sport">Sports:</label>
-  <select id="sport" name="sport">
-    <option value="horse-racing">Horse Racing</option>
-    <option value="greyhound-racing">Greyhound Racing</option>
-  </select>
-  <br>
-  <br>
-  <h2>Races</h2>
-  <div id="raceList">
-    <!-- Race list will be dynamically populated -->
+  <div id="raceInfo">
+    <h2>Race Information</h2>
+    <div id="races"></div>
   </div>
   <br>
   <script src="funds.js"></script>
   <script src="api_status.js"></script>
+  <script src="start_bot.js"></script>
+  <script src="races.js"></script>
 </body>
 </html>

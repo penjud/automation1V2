@@ -11,6 +11,8 @@ from betfairlightweight import exceptions as bf_exceptions
 import threading
 import requests
 from flask import request
+from betfair_client import BetfairClient
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -22,17 +24,16 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)
 
-# Initialize the Betfair API client for non-interactive login
-betfair_client = APIClient(username=os.getenv("BETFAIR_USERNAME"),
-                           password=os.getenv("BETFAIR_PASSWORD"),
-                           app_key=os.getenv("BETFAIR_APP_KEY"),
-                           certs=os.getenv('BETFAIR_CERT_PATH'))
+betfair_client = BetfairClient(
+    username=os.getenv("BETFAIR_USERNAME"),
+    password=os.getenv("BETFAIR_PASSWORD"),
+    app_key=os.getenv("BETFAIR_APP_KEY"),
+    certs_dir=os.getenv("BETFAIR_CERT_PATH")
+)
 
-# Initialize the Flumine framework with the Betfair client
 flumine_client = clients.BetfairClient(betfair_client)
 framework = Flumine(client=flumine_client)
 
-# Define the strategies
 thoroughbreds_strategy = FlatKashModel(
     market_filter=streaming_market_filter(
         event_type_ids=["7"],  # Horse Racing
@@ -69,14 +70,13 @@ def bot_logic():
         is_running = False
 
 def start_bot():
-    global is_running, bot_thread
-    if not is_running:
-        bot_thread = threading.Thread(target=bot_logic)
-        bot_thread.start()
-        return True
-    else:
-        logger.info("Bot is already running.")
-        return False
+    global is_running
+    while is_running:
+        try:
+            framework.run()
+        except Exception as e:
+            logger.error(f"Error in bot logic: {e}")
+            is_running = False
 
 def stop_bot():
     global is_running
@@ -92,56 +92,59 @@ def stop_bot():
 
 @app.route("/start", methods=["POST"])
 def start_bot_endpoint():
-    try:
-        start_bot()  # Ensure this function is robust and logs detailed errors
+    global is_running
+    if not is_running:
+        is_running = True
+        threading.Thread(target=start_bot).start()
         return "Bot started successfully", 200
-    except Exception as e:
-        logger.error(f"Error starting bot: {e}", exc_info=True)
-        return f"Error starting bot: {str(e)}", 500
-
+    else:
+        return "Bot is already running", 200
 
 @app.route("/stop", methods=["POST"])
 def stop_bot_endpoint():
-    try:
-        stop_bot()
+    global is_running
+    if is_running:
+        is_running = True
+        threading.Thread(target=start_bot).start()
         return "Bot stopped successfully", 200
-    except Exception as e:
-        logger.error(f"Error stopping bot: {e}")
-        return f"Error stopping bot: {str(e)}", 500
-
-navigation_url = "https://example.com"  # Replace with the actual navigation URL
-cert_file = "path/to/cert_file.pem"  # Replace with the actual path to the certificate file
-key_file = "path/to/key_file.pem"  # Replace with the actual path to the key file
+    else:
+        return "Bot is not running", 200
+    
+@app.route('/bot-status', methods=['GET'])
+def get_bot_status():
+    return jsonify({'is_running': is_running})
 
 @app.route('/api/check-connection', methods=['GET'])
 def check_connection():
-    try:
-        betfair_client.login()  # Non-interactive login
-        betfair_client.logout()
-        return jsonify({'connected': True}), 200
-    except bf_exceptions.BetfairError as e:
-        logger.error(f"Connection check failed: {e}", exc_info=True)
-        return jsonify({'connected': False, 'error': str(e)}), 500
+    if betfair_client.session_expired:
+        betfair_client.refresh_session_token()
+        return jsonify({"status": "Session refreshed successfully."}), 200
+    else:
+        return jsonify({"status": "Session is still valid."}), 200
 
 @app.route('/api/account-funds', methods=['GET'])
 def get_account_funds():
-    try:
-        # Ensure that the client is logged in before making the request
-        betfair_client.login()
-        account_funds = betfair_client.account.get_account_funds()
-        betfair_client.logout()
-        
-        # Convert account funds to a serializable format if needed
-        # (Assuming account_funds is already serializable, or you have a method to do so)
-        return jsonify(account_funds), 200
-    except bf_exceptions.BetfairError as e:
-        logger.error("Error retrieving account funds: {}".format(e), exc_info=True)
-        return jsonify({'error': str(e)}), 500
+    if not betfair_client.is_token_valid():
+        betfair_client.refresh_session_token()
 
+    account_funds = betfair_client.get_account_funds()
+    if account_funds is not None:
+        # Convert AccountFunds object to a dictionary
+        account_funds_dict = {
+            'available_to_bet_balance': account_funds
+        }
+        return jsonify(account_funds_dict)
+    else:
+        return jsonify({'error': 'Failed to retrieve account funds'}), 500
+    
 @app.route('/api/races', methods=['GET'])
 def get_races():
     event_type_id = request.args.get('eventTypeId')
     country_code = request.args.get('countryCode')
+
+    navigation_url = "https://api.betfair.com/exchange/betting/rest/v1/en/navigation/menu.json"  
+    cert_file = "certs/client-2048.crt"  
+    key_file = "certs/client-2048.key" 
 
     url = f'{navigation_url}{event_type_id}/{country_code}'
     print(f'Making API request to: {url}')  # Log the API request URL
@@ -155,6 +158,52 @@ def get_races():
     else:
         print(f'API request failed with status code: {response.status_code}')  # Log the error status code
         return jsonify({'error': 'Failed to fetch races'}), 500
+    
+@app.route('/api/races-for-date', methods=['GET'])
+def get_races_for_date():
+    event_type_id = request.args.get('eventTypeId')
+    market_count = request.args.get('marketCount', default=10, type=int)  # Default to 10 markets if not provided
+
+    races = betfair_client.get_races_for_date(event_type_id, market_count)
+    if races:
+        processed_races = []
+        for race in races:
+            race_details = {
+                'event_id': race.event.id,
+                'event_name': race.event.name,
+                'market_start_time': race.market_start_time.strftime('%Y-%m-%d %H:%M:%S'),
+                'market_count': len(race.market_ids)
+            }
+            processed_races.append(race_details)
+        return jsonify(processed_races), 200
+    else:
+        return jsonify({'error': 'Failed to retrieve races for date'}), 500
+    
+@app.route('/api/formatted-races', methods=['GET'])
+def get_formatted_races():
+    country_code = request.args.get('countryCode')
+    event_type_id = request.args.get('eventTypeId')
+    market_count = request.args.get('marketCount', default=10, type=int)
+    selected_date = request.args.get('date')
+
+    # Convert the selected date to the desired format
+    selected_date = datetime.strptime(selected_date, '%Y-%m-%d').strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    races = betfair_client.get_races_for_date(event_type_id, market_count, country_code, selected_date)
+    if races:
+        formatted_races = []
+        for race in races:
+            race_details = {
+                'event_id': race.event.id,
+                'event_name': race.event.name,
+                'market_start_time': race.market_start_time.strftime('%Y-%m-%d %H:%M:%S'),
+                'market_count': len(race.market_ids)
+            }
+            formatted_races.append(race_details)
+        return jsonify(formatted_races), 200
+    else:
+        return jsonify({'error': 'Failed to retrieve races'}), 500
+
 
 if __name__ == "__main__":
     logger.info("Starting the server...")
