@@ -1,13 +1,13 @@
 .App {
     text-align: center;
     padding: 20px;
-    background-color: #000000; /* Light grey background */
+    background-color: #ffffff; /* Light grey background */
     font-family: 'Arial', sans-serif; /* Set a clean, readable font */
-    color: rgb(238, 223, 11); /* Default text color set to yellow */
+    color: rgb(255, 255, 255); /* Default text color set to yellow */
   }
   
   h1, h2, h3, h4, h5, h6 {
-    color: rgb(243, 112, 5); /* All header elements (h1-h6) will be orange */
+    color: rgb(5, 21, 243); /* All header elements (h1-h6) will be orange */
   }
   
   button {
@@ -72,7 +72,7 @@
   }
   
   .race-item {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 5px;
   }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <link rel="stylesheet" type="text/css" href="css/style.css">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Strategies</title>
+</head>
+<body>
+ <div class="App">
+    <h1>Strategies</h1>
+    <br>
+    <div id="accountFunds"></div>
+    <br>
+    <div id="apiStatus"></div>
+    <br>
+    <br>
+    <label for="strategyNameInput">Strategy:</label>
+    <input type="text" id="strategyNameInput" name="strategyNameInput" maxlength="25">
+    <br>
+    <br>
+    <label for="savedStrategies">Saved Strategies:</label>
+    <select id="savedStrategies" name="savedStrategies">
+      <!-- Options will be dynamically added here -->
+    </select>
+    <br>
+    <button id="saveStrategy">Save Strategy</button>
+    <button id="loadStrategy">Load Strategy</button>
+    <button id="deleteStrategy">Delete Strategy</button>
+    <br>
+    <div id="raceFilters">
+      <label for="countrySelect">Country:</label>
+      <select id="countrySelect">
+        <option value="GB">Great Britain</option>
+        <option value="IE">Ireland</option>
+        <option value="AU">Australia</option>
+        <!-- Add more country options as needed -->
+      </select>
+      <br>
+      <br>
+      <label for="dateSelect">Date:</label>
+      <input type="date" id="dateSelect">
+      <br>
+      <br>
+      <label for="sportSelect">Sport:</label>
+      <select id="sportSelect">
+        <option value="7">Horse Racing</option>
+        <option value="4339">Greyhound Racing</option>
+        <!-- Add more sport options as needed -->
+      </select>
+    </div>
+    <br>
+    <br>
+    <div id="raceInfo"></div>
+    <h2>Race Information</h2>
+    <div id="raceList"></div>
+    <br>
+ </div>
+ <br>
+ <script src="js/funds.js"></script>
+ <script src="js/api_status.js"></script>
+ <script src="js/races.js"></script>
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Fetch saved strategies when the page loads
+      fetchSavedStrategies();
+
+      document.getElementById('saveStrategy').addEventListener('click', saveStrategy);
+      document.getElementById('loadStrategy').addEventListener('click', loadStrategy);
+      document.getElementById('deleteStrategy').addEventListener('click', deleteStrategy);
+    });
+
+    function saveStrategy() {
+      const strategyName = document.getElementById('strategyNameInput').value;
+      fetch('/api/save-strategy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ strategyName }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(`Strategy '${strategyName}' saved successfully.`);
+          // Add the new strategy to the select input
+          addStrategyToSelect(strategyName);
+          // Refresh the list of saved strategies
+          fetchSavedStrategies();
+        } else {
+          alert('Failed to save strategy.');
+        }
+      })
+      .catch(error => {
+        console.error('Error saving strategy:', error);
+        alert('Error saving strategy.');
+      });
+    }
+
+    function loadStrategy() {
+      // Your existing loadStrategy function code here
+    }
+
+    function deleteStrategy() {
+      // Your existing deleteStrategy function code here
+    }
+
+    function fetchSavedStrategies() {
+      fetch('/api/saved-strategies')
+        .then(response => response.json())
+        .then(data => {
+          const strategySelect = document.getElementById('savedStrategies');
+          strategySelect.innerHTML = ''; // Clear existing options
+          data.strategies.forEach(strategy => {
+            const option = document.createElement('option');
+            option.value = strategy;
+            option.textContent = strategy;
+            strategySelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching saved strategies:', error);
+        });
+    }
+
+    function addStrategyToSelect(strategyName) {
+      const strategySelect = document.getElementById('savedStrategies');
+      const option = document.createElement('option');
+      option.value = strategyName;
+      option.textContent = strategyName;
+      strategySelect.appendChild(option);
+    }
+ </script>
+</body>
+</html>

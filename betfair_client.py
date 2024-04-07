@@ -63,29 +63,39 @@ class BetfairClient:
             logger.info("Session is still valid.")
 
     def get_races_for_date(self, event_type_id, market_count, country_code, selected_date):
-        try:
-            market_filter = MarketFilter(
-                event_type_ids=[event_type_id],
-                market_start_time={
-                    'from': selected_date,
-                    'to': (datetime.strptime(selected_date, '%Y-%m-%dT%H:%M:%SZ') + timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-                },
-                market_countries=[country_code],
-                market_type_codes=['WIN'],
-                in_play_only=False
-            )
-            racing_events = self.betting.list_events(filter=market_filter)
-            return racing_events[:market_count] if market_count else racing_events
-        except Exception as e:
-            logger.error(f"Failed to retrieve races for date: {e}")
-            return None
 
-    def get_account_details(self):
-        try:
-            return self.account.get_account_details()
-        except Exception as e:
-            logger.error(f"Failed to retrieve account details: {e}")
-            return None
+        from_date_str = datetime.strptime(selected_date, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%dT%H:%M:%SZ')
+
+        to_date_str = (datetime.strptime(selected_date, '%Y-%m-%dT%H:%M:%SZ') + timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+        market_filter = MarketFilter(
+            event_type_ids=[event_type_id],
+            market_start_time={
+                'from': from_date_str,
+                'to': to_date_str
+            },
+            market_countries=[country_code],
+            market_type_codes=['WIN'],
+            in_play_only=False
+        )
+
+        # Use the market_filter to list events
+        racing_events = self.betting.list_events(filter=market_filter)
+        event_details = []
+
+        # Loop through each event result and collect details
+        for event_result in racing_events[:market_count] if market_count else racing_events:
+            # Here, adapt this code according to the actual structure of event_result.
+            # For example, if event_result contains an event attribute with id and name:
+            detail = {
+                'event_id': event_result.event.id,
+                'event_name': event_result.event.name,
+                'market_start_time': event_result.event.open_date.strftime('%Y-%m-%d %H:%M:%S')
+            }
+            event_details.append(detail)
+
+        return event_details
 
     def get_account_funds(self):
         try:
