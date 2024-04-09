@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Betbot Frontend</title>
+</head>
+<body>
+  <h1>Betbot Frontend</h1>
+  <div id="accountFunds"></div>
+  <br>
+  <div id="apiStatus"></div>
+  <br>
+  <div id="botStatus" class="bot-status bot-stopped">Bot is not running</div>
+  <br>
+  <br>
+  <button onclick="startBot()">Start Bot</button>
+  <button onclick="stopBot()">Stop Bot</button>
+  <script src="start_bot.js"></script>
+  <script src="funds.js"></script>
+  <script src="api_status.js"></script>
+  <script src="races.js"></script>
+</body>
+</html>

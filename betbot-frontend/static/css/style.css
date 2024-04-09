@@ -1,82 +1,104 @@
 .App {
-    text-align: center;
-    padding: 20px;
-    background-color: #ffffff; /* Light grey background */
-    font-family: 'Arial', sans-serif; /* Set a clean, readable font */
-    color: rgb(255, 255, 255); /* Default text color set to yellow */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px;
+  background-color: #f5f5f5;
+  font-family: 'Helvetica', sans-serif;
+  color: #333333;
+  min-height: 100vh;
+  box-sizing: border-box;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    color: rgb(5, 21, 243); /* All header elements (h1-h6) will be orange */
+  color: #333333;
+  margin: 20px 0;
   }
   
   button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #48056e; /* A nice shade of blue */
-    color: white; /* White text on the buttons for contrast */
-    border: none;
-    border-radius: 5px; /* Rounded corners for the buttons */
-    cursor: pointer; /* Change cursor to pointer when hovering over buttons */
-    transition: background-color 0.3s; /* Smooth transition for button background color */
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  }
+  
+  button:hover {
+  background-color: #0056b3;
   }
   
   .bot-status {
-    font-weight: bold;
+  font-weight: bold;
+  margin-bottom: 10px;
   }
   
   .bot-running {
-    color: rgb(3, 243, 3);
+  color: #28a745;
   }
   
   .bot-stopped {
-    color: red;
-  }
-
-  label {
-    display: inline-block;
-    width: 120px;
-    font-weight: bold;
+  color: #dc3545;
   }
   
-  select, input[type="text"] {
-    width: 200px;
-    padding: 5px;
-    font-size: 16px;
+  label {
+  display: inline-block;
+  width: 150px;
+  font-weight: bold;
+  margin-right: 10px;
+  }
+  
+  select, input[type="text"], input[type="date"] {
+  width: 250px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  }
+  
+  #raceFilters {
+  margin-bottom: 20px;
   }
   
   #raceList {
-    margin-top: 10px;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
   }
   
   .race-item {
-    margin-bottom: 5px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+  }
+  
+  .race-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
   .connected {
-    color: rgb(5, 248, 5);
+  color: #28a745;
   }
   
   .disconnected {
-    color: red;
+  color: #dc3545;
   }
+  
   #raceInfo {
-    margin-top: 20px;
-  }
-  
-  #raceList {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-  }
-  
-  .race-item {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
+  margin-top: 20px;
+  text-align: left;
+  width: 100%;
   }
   
   .race-item h3 {
-    margin-top: 0;
+  margin-top: 0;
   }

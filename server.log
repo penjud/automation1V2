@@ -1,0 +1,40 @@
+2024-04-04 09:03:57,193 - flumine.clients.clients - INFO - Client added
+2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding client control MAX_TRANSACTION_COUNT
+2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding trading control ORDER_VALIDATION
+2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding trading control MARKET_VALIDATION
+2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding trading control STRATEGY_EXPOSURE
+2024-04-04 09:03:57,193 - __main__ - INFO - Starting the server...
+2024-04-04 09:03:57,195 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.21:5000
+2024-04-04 09:03:57,195 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-04-04 09:55:57,985 - __main__ - INFO - Starting the betting bot.
+2024-04-04 09:55:57,985 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
+2024-04-04 09:55:57,985 - flumine.streams.streams - INFO - Creating new <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
+2024-04-04 09:55:57,985 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
+2024-04-04 09:55:57,985 - flumine.streams.streams - INFO - Creating new <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
+2024-04-04 09:55:57,985 - flumine.baseflumine - INFO - Starting flumine
+2024-04-04 09:55:57,985 - __main__ - ERROR - Error starting bot: 'NoneType' object has no attribute 'login'
+2024-04-04 09:55:57,986 - werkzeug - INFO - 127.0.0.1 - - [04/Apr/2024 09:55:57] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
+2024-04-04 10:01:44,059 - __main__ - INFO - Starting the betting bot.
+2024-04-04 10:01:44,059 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
+2024-04-04 10:01:44,059 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
+2024-04-04 10:01:44,059 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatKashModel' already added
+2024-04-04 10:01:44,059 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
+2024-04-04 10:01:44,059 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
+2024-04-04 10:01:44,059 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatIggyModel' already added
+2024-04-04 10:01:44,059 - flumine.baseflumine - INFO - Starting flumine
+2024-04-04 10:01:44,059 - __main__ - ERROR - Error starting bot: 'NoneType' object has no attribute 'login'
+2024-04-04 10:01:44,060 - werkzeug - INFO - 127.0.0.1 - - [04/Apr/2024 10:01:44] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
+2024-04-04 10:06:29,399 - __main__ - INFO - Starting the betting bot.
+2024-04-04 10:06:29,399 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
+2024-04-04 10:06:29,399 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
+2024-04-04 10:06:29,399 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatKashModel' already added
+2024-04-04 10:06:29,399 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
+2024-04-04 10:06:29,400 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
+2024-04-04 10:06:29,400 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatIggyModel' already added
+2024-04-04 10:06:29,400 - flumine.baseflumine - INFO - Starting flumine
+2024-04-04 10:06:29,400 - __main__ - ERROR - Error starting bot: 'NoneType' object has no attribute 'login'
+2024-04-04 10:06:29,400 - werkzeug - INFO - 127.0.0.1 - - [04/Apr/2024 10:06:29] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
+2024-04-04 10:09:55,495 - __main__ - INFO - Server stopped.

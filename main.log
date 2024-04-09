@@ -1,0 +1,73 @@
+2024-04-04 09:41:55,175 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): identitysso-cert.betfair.com:443
+2024-04-04 09:41:56,676 - urllib3.connectionpool - DEBUG - https://identitysso-cert.betfair.com:443 "POST /api/certlogin HTTP/1.1" 200 87
+2024-04-04 09:41:56,681 - flumine.clients.clients - INFO - Client added
+2024-04-04 09:41:56,681 - flumine.baseflumine - INFO - Adding client control MAX_TRANSACTION_COUNT
+2024-04-04 09:41:56,681 - flumine.baseflumine - INFO - Adding trading control ORDER_VALIDATION
+2024-04-04 09:41:56,682 - flumine.baseflumine - INFO - Adding trading control MARKET_VALIDATION
+2024-04-04 09:41:56,682 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): identitysso.betfair.com:443
+2024-04-04 09:41:56,682 - flumine.baseflumine - INFO - Adding trading control STRATEGY_EXPOSURE
+2024-04-04 09:41:56,682 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
+2024-04-04 09:41:56,682 - flumine.streams.streams - INFO - Creating new <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
+2024-04-04 09:41:56,682 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
+2024-04-04 09:41:56,683 - flumine.streams.streams - INFO - Creating new <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
+2024-04-04 09:41:56,683 - flumine.baseflumine - INFO - Adding worker terminate
+2024-04-04 09:41:56,683 - __main__ - INFO - Starting the main application...
+2024-04-04 09:41:56,683 - flumine.baseflumine - INFO - Starting flumine
+2024-04-04 09:41:56,686 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): identitysso-cert.betfair.com:443
+2024-04-04 09:41:57,378 - urllib3.connectionpool - DEBUG - https://identitysso.betfair.com:443 "POST /api/keepAlive HTTP/1.1" 200 None
+2024-04-04 09:41:58,050 - urllib3.connectionpool - DEBUG - https://identitysso-cert.betfair.com:443 "POST /api/certlogin HTTP/1.1" 200 87
+2024-04-04 09:41:58,052 - flumine.clients.clients - INFO - Client login
+2024-04-04 09:41:58,055 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.betfair.com:443
+2024-04-04 09:41:58,697 - urllib3.connectionpool - DEBUG - https://api.betfair.com:443 "POST /exchange/account/json-rpc/v1 HTTP/1.1" 200 182
+2024-04-04 09:41:58,702 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.betfair.com:443
+2024-04-04 09:41:59,222 - urllib3.connectionpool - DEBUG - https://api.betfair.com:443 "POST /exchange/account/json-rpc/v1 HTTP/1.1" 200 155
+2024-04-04 09:41:59,225 - flumine.clients.clients - INFO - Client update account details
+2024-04-04 09:41:59,226 - flumine.baseflumine - INFO - Adding worker keep_alive
+2024-04-04 09:41:59,226 - flumine.baseflumine - INFO - Adding worker poll_market_catalogue
+2024-04-04 09:41:59,226 - flumine.baseflumine - INFO - Adding worker poll_account_balance
+2024-04-04 09:41:59,227 - flumine.baseflumine - INFO - Adding worker poll_market_closure
+2024-04-04 09:41:59,227 - flumine.worker - INFO - BackgroundWorker terminate starting
+2024-04-04 09:41:59,227 - flumine.worker - INFO - BackgroundWorker keep_alive starting
+2024-04-04 09:41:59,227 - flumine.worker - DEBUG - BackgroundWorker keep_alive executing
+2024-04-04 09:41:59,227 - flumine.worker - INFO - BackgroundWorker poll_market_catalogue starting
+2024-04-04 09:41:59,228 - flumine.worker - INFO - BackgroundWorker poll_account_balance starting
+2024-04-04 09:41:59,228 - flumine.worker - INFO - BackgroundWorker poll_market_closure starting
+2024-04-04 09:42:03,406 - __main__ - ERROR - An error occurred while running the application
+Traceback (most recent call last):
+  File "/home/penjud/vscode_projects/automation1V2/main.py", line 86, in <module>
+    framework.run()
+  File "/usr/local/lib/python3.10/dist-packages/flumine/flumine.py", line 27, in run
+    with self:
+  File "/usr/local/lib/python3.10/dist-packages/flumine/baseflumine.py", line 450, in __enter__
+    self.strategies.start(self)
+  File "/usr/local/lib/python3.10/dist-packages/flumine/strategy/strategy.py", line 288, in start
+    s.start(flumine)
+  File "/home/penjud/vscode_projects/automation1V2/bkstrat.py", line 126, in start
+    iggy_df = pd.read_csv(iggy_url)
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/common.py", line 728, in get_handle
+    ioargs = _get_filepath_or_buffer(
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/common.py", line 384, in _get_filepath_or_buffer
+    with urlopen(req_info) as req:
+  File "/usr/local/lib/python3.10/dist-packages/pandas/io/common.py", line 289, in urlopen
+    return urllib.request.urlopen(*args, **kwargs)
+  File "/usr/lib/python3.10/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+  File "/usr/lib/python3.10/urllib/request.py", line 525, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.10/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+  File "/usr/lib/python3.10/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+  File "/usr/lib/python3.10/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.10/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error

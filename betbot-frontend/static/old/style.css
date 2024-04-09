@@ -1,0 +1,82 @@
+.App {
+    text-align: center;
+    padding: 20px;
+    background-color: #111111; /* Light grey background */
+    font-family: 'Arial', sans-serif; /* Set a clean, readable font */
+    color: rgb(12, 15, 156); /* Default text color set to yellow */
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: rgb(231, 66, 182); /* All header elements (h1-h6) will be orange */
+  }
+  
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #48056e; /* A nice shade of blue */
+    color: white; /* White text on the buttons for contrast */
+    border: none;
+    border-radius: 5px; /* Rounded corners for the buttons */
+    cursor: pointer; /* Change cursor to pointer when hovering over buttons */
+    transition: background-color 0.3s; /* Smooth transition for button background color */
+  }
+  
+  .bot-status {
+    font-weight: bold;
+  }
+  
+  .bot-running {
+    color: green;
+  }
+  
+  .bot-stopped {
+    color: red;
+  }
+
+  label {
+    display: inline-block;
+    width: 120px;
+    font-weight: bold;
+  }
+  
+  select, input[type="text"] {
+    width: 200px;
+    padding: 5px;
+    font-size: 16px;
+  }
+  
+  #raceList {
+    margin-top: 10px;
+  }
+  
+  .race-item {
+    margin-bottom: 5px;
+  }
+  
+  .connected {
+    color: green;
+  }
+  
+  .disconnected {
+    color: red;
+  }
+  #raceInfo {
+    margin-top: 20px;
+  }
+  
+  #raceList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .race-item {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .race-item h3 {
+    margin-top: 0;
+  }

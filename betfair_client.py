@@ -44,6 +44,16 @@ class BetfairClient:
             logger.error(f"API connection check failed: {e}")
             return False
         
+    def keep_alive(self):
+        """Keep the session alive by calling the keep_alive method of the betfairlightweight.APIClient."""
+        try:
+            self.client.keep_alive()
+            return True
+        except betfairlightweight.exceptions.APIError as e:
+            logger.error(f"Failed to keep session alive: {e}")
+            return False
+
+        
     def refresh_session_token(self):
         self.client.logout()
         self.session_token = self.client.login()

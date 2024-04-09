@@ -9,6 +9,8 @@ from betfairlightweight.filters import streaming_market_filter
 from dotenv import load_dotenv
 from flask_cors import CORS
 import threading
+import json
+from flask import make_response
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='server.log', filemode='w')
@@ -124,19 +126,48 @@ def home():
 def strategies_page():
     return send_from_directory('static', 'strategies.html')
 
-@app.route('/api/save-strategy', methods=['POST'])
-def save_strategy():
-    data = request.json
-    strategy_name = data.get('strategyName')
-    strategy_settings = data.get('strategySettings')
-    if not strategy_name:
-        return jsonify({'error': 'Strategy name is required'}), 400
-    strategies[strategy_name] = strategy_settings
-    return jsonify({'message': 'Strategy saved successfully'}), 200
+@app.route('/api/save-strategy-to-file', methods=['POST'])
+def save_strategy_to_file():
+    try:
+        data = request.get_json()
+        strategy_name = data['strategyName']
+        strategy_settings = data['strategySettings']
+        
+        file_path = f"strategies/{strategy_name}.json"
+        with open(file_path, 'w') as file:
+            json.dump(strategy_settings, file)
+        
+        response = make_response(jsonify({'message': 'Strategy saved successfully'}))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    except Exception as e:
+        logger.error(f"Error saving strategy: {e}")
+        response = make_response(jsonify({'error': 'Failed to save strategy'}), 500)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
-@app.route('/api/saved-strategies', methods=['GET'])
-def get_saved_strategies():
-    return jsonify({'strategies': list(strategies.keys())}), 200
+@app.route('/api/load-strategy-from-file')
+def load_strategy_from_file():
+    strategy_name = request.args.get('strategyName')
+    file_path = f"strategies/{strategy_name}.json"
+    
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            strategy_settings = json.load(file)
+        return jsonify(strategy_settings)
+    else:
+        return jsonify({'message': 'Strategy not found'})
+
+@app.route('/api/delete-strategy-file', methods=['DELETE'])
+def delete_strategy_file():
+    strategy_name = request.args.get('strategyName')
+    file_path = f"strategies/{strategy_name}.json"
+    
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return jsonify({'message': 'Strategy deleted successfully'})
+    else:
+        return jsonify({'message': 'Strategy not found'})
 
 @app.route('/api/races', methods=['GET'])
 def get_races():

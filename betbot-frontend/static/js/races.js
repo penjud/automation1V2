@@ -4,8 +4,9 @@ function fetchAndDisplayRaces() {
   const sportSelect = document.getElementById('sportSelect').value;
   const raceListElement = document.getElementById('raceList');
   const queryParameters = `countryCode=${countrySelect}&date=${dateSelect}&eventTypeId=${sportSelect}`;
-  const url = `http://localhost:5000/api/races-for-date?${queryParameters}`;  // Ensure the URL is correct
-        console.log(queryParameters);
+  const url = `http://localhost:5000/api/races-for-date?${queryParameters}`;
+
+  console.log(queryParameters);
 
   fetch(url)
     .then(response => {
@@ -17,11 +18,21 @@ function fetchAndDisplayRaces() {
     .then(races => {
       raceListElement.innerHTML = ''; // Clear previous content
 
-      if (races && Array.isArray(races)) {  // Check if data exists and is an array
+      if (races && Array.isArray(races)) {
+        // Sort races by start time in ascending order
+        races.sort((a, b) => new Date(a.market_start_time) - new Date(b.market_start_time));
+
         races.forEach(race => {
           const raceElement = document.createElement('div');
           raceElement.className = 'race-item';
-          raceElement.innerHTML = `<h3>${race.event_name}</h3><p>Starts at: ${race.market_start_time}</p>`;
+
+          // Generate the race item content based on the race data
+          raceElement.innerHTML = `
+            <h3><a href="race-details.html?raceId=${race.market_id}">${race.event_name}</a></h3>
+            <p>Starts at: ${formatTime(race.market_start_time)}</p>
+            <!-- Add more race details as needed -->
+          `;
+
           raceListElement.appendChild(raceElement);
         });
       } else {
@@ -32,6 +43,12 @@ function fetchAndDisplayRaces() {
       console.error('Error fetching races:', error);
       raceListElement.innerHTML = `<p>Error fetching race data: ${error.message}</p>`;
     });
+}
+
+// Helper function to format the time
+function formatTime(dateString) {
+  const options = { hour: '2-digit', minute: '2-digit' };
+  return new Date(dateString).toLocaleTimeString([], options);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
