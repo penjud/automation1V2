@@ -1,11 +1,43 @@
 import requests
 import logging
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 SERVER_URL = 'http://localhost:5000'  # Update with the actual server URL if hosted elsewhere
+
+class Database:
+    def __init__(self, db_params):
+        self.conn = psycopg2.connect(**db_params)
+
+    def get_sports(self):
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("SELECT * FROM sports")
+            return cursor.fetchall()
+
+    def add_sport(self, name):
+        with self.conn.cursor() as cursor:
+            cursor.execute("INSERT INTO sports (name) VALUES (%s)", (name,))
+            self.conn.commit()
+
+    def close(self):
+        self.conn.close()
+
+# Usage
+db_params = {
+    'dbname': 'sickpunt',
+    'user': 'penjud',
+    'password': '#18Hoppy70',
+    'host': 'localhost'
+}
+
+db = Database(db_params)
+print(db.get_sports())
+db.add_sport('New Sport')
+db.close()
 
 def start_bot():
     url = f"{SERVER_URL}/start"
