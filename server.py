@@ -4,13 +4,17 @@ from datetime import datetime
 from flask import Flask, request, jsonify, send_from_directory
 from flumine import Flumine, clients
 from bkstrat import FlatKashModel, FlatIggyModel
-from betfair_client import BetfairClient
 from betfairlightweight.filters import streaming_market_filter
 from dotenv import load_dotenv
 from flask_cors import CORS
 import threading
 import json
-from flask import make_response
+from sqlalchemy.orm import Session
+from models import Strategy
+from models import User
+from flask_sqlalchemy import SQLAlchemy
+from betfair_client import BetfairClient
+from betfair_client import get_betfair_client
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='server.log', filemode='w')
@@ -18,6 +22,8 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'  # replace with your database URI
+db = SQLAlchemy(app)
 
 # Load environment variables
 load_dotenv()
@@ -29,10 +35,13 @@ betfair_client = BetfairClient(
     certs_dir=os.getenv("BETFAIR_CERT_PATH")
 )
 
-flumine_client = clients.BetfairClient(betfair_client)
-framework = Flumine(client=flumine_client)
+betfair_client_instance = get_betfair_client()
+if betfair_client_instance:
+    flumine_client = betfair_client_instance.client  # assuming .client is the correct attribute
+    framework = Flumine(client=flumine_client)
+else:
 
-strategies = {
+    strategies = {
     "FlatKashModel": FlatKashModel(
         market_filter=streaming_market_filter(
             event_type_ids=["7"], # Horse Racing
@@ -62,18 +71,20 @@ def start_bot():
     global is_running
     while is_running:
         try:
+            # Assuming 'framework.run()' is the correct way to run your bot
             framework.run()
         except Exception as e:
             logger.error(f"Error in bot logic: {e}")
             is_running = False
 
 def stop_bot():
-    global is_running
+    global is_running, bot_thread
     if is_running:
         logger.info("Stopping the betting bot.")
         is_running = False
         if bot_thread:
             bot_thread.join()
+            bot_thread = None
         return True
     else:
         logger.info("Bot is not running.")
@@ -81,25 +92,23 @@ def stop_bot():
 
 @app.route("/start", methods=["POST"])
 def start_bot_endpoint():
-    global is_running
+    global is_running, bot_thread
     if not is_running:
         is_running = True
-        threading.Thread(target=start_bot).start()
+        bot_thread = threading.Thread(target=start_bot)
+        bot_thread.start()
         return "Bot started successfully", 200
     else:
         return "Bot is already running", 200
 
 @app.route("/stop", methods=["POST"])
 def stop_bot_endpoint():
-    global is_running
-    if is_running:
-        if stop_bot():
-            return "Bot stopped successfully", 200
-        else:
-            return "Failed to stop the bot", 500
+    if stop_bot():
+        return "Bot stopped successfully", 200
     else:
         return "Bot is not running", 200
 
+    
 @app.route('/bot-status', methods=['GET'])
 def get_bot_status():
     return jsonify({'is_running': is_running})
@@ -126,48 +135,98 @@ def home():
 def strategies_page():
     return send_from_directory('static', 'strategies.html')
 
-@app.route('/api/save-strategy-to-file', methods=['POST'])
-def save_strategy_to_file():
+@app.route('/api/save-strategy', methods=['POST'])
+def save_strategy():
+    session = Session()
     try:
         data = request.get_json()
         strategy_name = data['strategyName']
         strategy_settings = data['strategySettings']
-        
-        file_path = f"strategies/{strategy_name}.json"
-        with open(file_path, 'w') as file:
-            json.dump(strategy_settings, file)
-        
-        response = make_response(jsonify({'message': 'Strategy saved successfully'}))
-        response.headers['Content-Type'] = 'application/json'
-        return response
+
+        strategy = session.query(Strategy).filter(Strategy.strategy_name == strategy_name).first()
+        if strategy:
+            strategy.strategy_settings = json.dumps(strategy_settings)
+        else:
+            new_strategy = Strategy(strategy_name=strategy_name, strategy_settings=json.dumps(strategy_settings))
+            session.add(new_strategy)
+
+        session.commit()
+        return jsonify({'message': 'Strategy saved successfully'})
     except Exception as e:
         logger.error(f"Error saving strategy: {e}")
-        response = make_response(jsonify({'error': 'Failed to save strategy'}), 500)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify({'error': 'Failed to save strategy'}), 500
+    finally:
+        session.close()
 
-@app.route('/api/load-strategy-from-file')
-def load_strategy_from_file():
-    strategy_name = request.args.get('strategyName')
-    file_path = f"strategies/{strategy_name}.json"
-    
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
-            strategy_settings = json.load(file)
-        return jsonify(strategy_settings)
-    else:
-        return jsonify({'message': 'Strategy not found'})
+@app.route('/api/delete-strategy', methods=['DELETE'])
+def delete_strategy():
+    session = Session()
+    try:
+        strategy_name = request.args.get('strategyName')
+        strategy = session.query(Strategy).filter(Strategy.strategy_name == strategy_name).first()
+        if strategy:
+            session.delete(strategy)
+            session.commit()
+            return jsonify({'message': 'Strategy deleted successfully'})
+        else:
+            return jsonify({'message': 'Strategy not found'}), 404
+    except Exception as e:
+        logger.error(f"Error deleting strategy: {e}")
+        return jsonify({'error': 'Failed to delete strategy'}), 500
+    finally:
+        session.close()
 
-@app.route('/api/delete-strategy-file', methods=['DELETE'])
-def delete_strategy_file():
-    strategy_name = request.args.get('strategyName')
-    file_path = f"strategies/{strategy_name}.json"
+@app.route('/api/load-strategy')
+def load_strategy():
+    session = Session()
+    try:
+        strategy_name = request.args.get('strategyName')
+        strategy = session.query(Strategy).filter(Strategy.strategy_name == strategy_name).first()
+        if strategy:
+            # Assuming strategy_settings is stored as a JSON string
+            strategy_settings = json.loads(strategy.strategy_settings)
+            return jsonify(strategy_settings)
+        else:
+            return jsonify({'message': 'Strategy not found'}), 404
+    except Exception as e:
+        logger.error(f"Error loading strategy: {e}")
+        return jsonify({'error': 'Failed to load strategy'}), 500
+    finally:
+        session.close()
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
     
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        return jsonify({'message': 'Strategy deleted successfully'})
+    # Retrieve user from the database based on username
+    user = db.session.query(User).filter_by(username=username).first()
+    
+    if user and user.check_password(password):
+        # Check if the user's IP address matches the whitelisted IP
+        def generate_session_token(user_id):
+            # Add your implementation here
+            pass
+
+        if request.remote_addr == user.whitelisted_ip:
+            # Generate a session token
+            session_token = generate_session_token(user.id)
+            
+            return jsonify({
+                'success': True,
+                'session_token': session_token
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Access denied. IP address not whitelisted.'
+            }), 403
     else:
-        return jsonify({'message': 'Strategy not found'})
+        return jsonify({
+            'success': False,
+            'message': 'Invalid username or password.'
+        }), 401
 
 @app.route('/api/races', methods=['GET'])
 def get_races():

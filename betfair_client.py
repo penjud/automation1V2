@@ -6,14 +6,12 @@ import time
 from betfairlightweight.filters import market_filter as MarketFilter
 from datetime import datetime, timedelta
 
-# Load environment variables and set up logging
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class BetfairClient:
     def __init__(self, username, password, app_key, certs_dir, session_timeout=3600):
-        self.username = username
         self.client = betfairlightweight.APIClient(username, password, app_key, certs_dir)
         self.session_token = self.client.login()
         self.account = self.client.account
@@ -75,9 +73,7 @@ class BetfairClient:
     def get_races_for_date(self, event_type_id, market_count, country_code, selected_date):
 
         from_date_str = datetime.strptime(selected_date, '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%dT%H:%M:%SZ')
-
         to_date_str = (datetime.strptime(selected_date, '%Y-%m-%dT%H:%M:%SZ') + timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%SZ')
-
 
         market_filter = MarketFilter(
             event_type_ids=[event_type_id],
@@ -131,15 +127,41 @@ class BetfairClient:
             logger.error(f"Failed to retrieve races: {e}")
             return None
 
+    def fetch_race_details_by_id(race_id):
+        betfair_client = BetfairClient()
+        market_catalogue = betfair_client.listMarketCatalogue(event_ids=[race_id])
+
+        if market_catalogue:
+            market = market_catalogue[0]
+            event = market['event']
+            return {
+                'event_name': event['name'],
+                'market_start_time': event['openDate'],
+                'country_code': event.get('countryCode', 'Unknown'),
+                'market_count': len(market['runners'])
+            }
+        
+        return {'error': 'Race details not found'}
+
+    def get_upcoming_race_ids(self):
+        betfair_client = BetfairClient()
+        # Fetch upcoming races, assuming there is a method like listUpcomingEvents or similar
+        upcoming_races = betfair_client.listUpcomingEvents(event_type_id='7')  # '7' for horse racing, as an example
+        return [race['id'] for race in upcoming_races]
+
+    # Define race_details_list variable
+    race_details_list = []
+
+    for race_details in race_details_list:
+        print(race_details)
+
 def get_betfair_client():
     try:
         username = os.getenv('BETFAIR_USERNAME')
         password = os.getenv('BETFAIR_PASSWORD')
         app_key = os.getenv('BETFAIR_APP_KEY')
         certs_dir = os.getenv('BETFAIR_CERT_PATH')
-        betfair_client = BetfairClient(username, password, app_key, certs_dir)
-        logger.info("Betfair client successfully logged in.")
-        return betfair_client
+        return BetfairClient(username, password, app_key, certs_dir)
     except Exception as e:
         logger.error(f"Failed to initialize Betfair client: {e}")
         return None

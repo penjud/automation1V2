@@ -4,7 +4,6 @@ from flumine.order.trade import Trade
 from flumine.order.order import LimitOrder
 from flumine.markets.market import Market
 import logging
-import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -49,7 +48,7 @@ class StrategyBase(BaseStrategy):
         market_book.place_order(order)
 
 class FlatKashModel(StrategyBase):
-    def start(self, flumine) -> None:
+    def start(self) -> None:
         print("starting strategy 'FlatKashModel'")
         url = 'https://betfair-data-supplier-prod.herokuapp.com/api/widgets/kash-ratings-model/datasets?date='
         url += pd.Timestamp.now().strftime("%Y-%m-%d")
@@ -70,7 +69,7 @@ class FlatIggyModel(StrategyBase):
         url += '&presenter=RatingsPresenter&csv=true'
         self.iggy_df = self.fetch_data(url)
 
-    def check_market_book(self, market: Market, market_book) -> bool:
+    def check_market_book(self, market_book) -> bool:
         return market_book.status != "CLOSED"
 
     def process_market_book(self, market: Market, market_book) -> None:
