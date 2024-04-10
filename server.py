@@ -205,6 +205,25 @@ def get_races_for_date():
         logger.exception("Failed to retrieve races")
         return jsonify({'error': 'Failed to retrieve races'}), 500
 
+@app.route('/api/race-details', methods=['GET'])
+def get_race_details():
+    race_id = request.args.get('raceId')
+    if not race_id:
+        return jsonify({'error': 'No race ID provided'}), 400
+
+    # Fetch race details from your data source using the race_id
+    # This is a placeholder. Replace it with your actual logic to fetch race details.
+    race_details = fetch_race_details_by_id(race_id)
+
+def fetch_race_details_by_id(race_id):
+    # Implement your logic here to fetch the race details by race_id
+    # This is a placeholder. Replace it with your actual logic.
+    return {
+        'event_name': 'Sample Race',
+        'market_start_time': '2023-04-01T14:00:00Z',
+        # Add other race details here
+    }    
+
 if __name__ == "__main__":
     logger.info("Starting the server...")
     app.run(host='0.0.0.0', port=5000)

@@ -47,7 +47,7 @@ function fetchAndDisplayRaces() {
 
 // Helper function to format the time
 function formatTime(dateString) {
-  const options = { hour: '2-digit', minute: '2-digit' };
+  const options = { hour: '2-digit', minute: '2-digit', hour12: false,  timeZone: 'UTC' };
   return new Date(dateString).toLocaleTimeString([], options);
 }
 
