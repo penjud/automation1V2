@@ -30,3 +30,9 @@
 # Usage
 This bot will connect with teh betfair api and allow a user to see the sports for the day (currently Horses and greyhounds only.  We are developing a way to see the EV within a list of runners and highlight the best in the group based on the strategies set by the user and incorporating references to historical data to combine data (not yet developed) to point out the best betting option for the user.
 Developers are looking at integrating AI to guide the decisions and bet placement.
+
+betfair_client.py can be used for general interactions with the Betfair API, potentially used across different parts of your application or in other projects.
+flumine_bf_client.py is specifically tailored for use with Flumine, ensuring that your trading bot can interact with the Betfair API in a way that Flumine expects.
+
+server.py is essential for providing the web interface and API for your betting bot. It handles HTTP requests, interacts with the Betfair API, and manages the bot's state.
+main.py serves as the entry point for your application, potentially orchestrating higher-level operations that involve starting the bot, interacting with the database, and more. It's a good practice to separate the concerns of your application into different modules or scripts based on their functionality.
