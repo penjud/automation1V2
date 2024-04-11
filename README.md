@@ -35,4 +35,4 @@ betfair_client.py can be used for general interactions with the Betfair API, pot
 flumine_bf_client.py is specifically tailored for use with Flumine, ensuring that your trading bot can interact with the Betfair API in a way that Flumine expects.
 
 server.py is essential for providing the web interface and API for your betting bot. It handles HTTP requests, interacts with the Betfair API, and manages the bot's state.
-main.py serves as the entry point for your application, potentially orchestrating higher-level operations that involve starting the bot, interacting with the database, and more. It's a good practice to separate the concerns of your application into different modules or scripts based on their functionality.
+main.py serves as the entry point for your application, potentially orchestrating higher-level operations that involve starting the bot, interacting with the database, and more. 
