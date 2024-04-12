@@ -1,40 +1,44 @@
-2024-04-04 09:03:57,193 - flumine.clients.clients - INFO - Client added
-2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding client control MAX_TRANSACTION_COUNT
-2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding trading control ORDER_VALIDATION
-2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding trading control MARKET_VALIDATION
-2024-04-04 09:03:57,193 - flumine.baseflumine - INFO - Adding trading control STRATEGY_EXPOSURE
-2024-04-04 09:03:57,193 - __main__ - INFO - Starting the server...
-2024-04-04 09:03:57,195 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
- * Running on http://192.168.1.21:5000
-2024-04-04 09:03:57,195 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
-2024-04-04 09:55:57,985 - __main__ - INFO - Starting the betting bot.
-2024-04-04 09:55:57,985 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
-2024-04-04 09:55:57,985 - flumine.streams.streams - INFO - Creating new <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
-2024-04-04 09:55:57,985 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
-2024-04-04 09:55:57,985 - flumine.streams.streams - INFO - Creating new <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
-2024-04-04 09:55:57,985 - flumine.baseflumine - INFO - Starting flumine
-2024-04-04 09:55:57,985 - __main__ - ERROR - Error starting bot: 'NoneType' object has no attribute 'login'
-2024-04-04 09:55:57,986 - werkzeug - INFO - 127.0.0.1 - - [04/Apr/2024 09:55:57] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
-2024-04-04 10:01:44,059 - __main__ - INFO - Starting the betting bot.
-2024-04-04 10:01:44,059 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
-2024-04-04 10:01:44,059 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
-2024-04-04 10:01:44,059 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatKashModel' already added
-2024-04-04 10:01:44,059 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
-2024-04-04 10:01:44,059 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
-2024-04-04 10:01:44,059 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatIggyModel' already added
-2024-04-04 10:01:44,059 - flumine.baseflumine - INFO - Starting flumine
-2024-04-04 10:01:44,059 - __main__ - ERROR - Error starting bot: 'NoneType' object has no attribute 'login'
-2024-04-04 10:01:44,060 - werkzeug - INFO - 127.0.0.1 - - [04/Apr/2024 10:01:44] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
-2024-04-04 10:06:29,399 - __main__ - INFO - Starting the betting bot.
-2024-04-04 10:06:29,399 - flumine.baseflumine - INFO - Adding strategy FlatKashModel
-2024-04-04 10:06:29,399 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (2000) for strategy FlatKashModel
-2024-04-04 10:06:29,399 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatKashModel' already added
-2024-04-04 10:06:29,399 - flumine.baseflumine - INFO - Adding strategy FlatIggyModel
-2024-04-04 10:06:29,400 - flumine.streams.streams - INFO - Using <class 'flumine.streams.marketstream.MarketStream'> (3000) for strategy FlatIggyModel
-2024-04-04 10:06:29,400 - flumine.strategy.strategy - WARNING - Strategy of same name 'FlatIggyModel' already added
-2024-04-04 10:06:29,400 - flumine.baseflumine - INFO - Starting flumine
-2024-04-04 10:06:29,400 - __main__ - ERROR - Error starting bot: 'NoneType' object has no attribute 'login'
-2024-04-04 10:06:29,400 - werkzeug - INFO - 127.0.0.1 - - [04/Apr/2024 10:06:29] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
-2024-04-04 10:09:55,495 - __main__ - INFO - Server stopped.
+2024-04-11 19:59:21,098 - server - INFO - Starting the server...
+2024-04-11 20:12:26,005 - server - INFO - Server stopped.
+2024-04-11 20:15:30,893 - INFO - Logging is set up.
+2024-04-11 20:15:32,352 - INFO - Starting the server...
+2024-04-11 20:21:57,400 - INFO - Server stopped.
+2024-04-11 20:22:18,906 - INFO - Logging is set up.
+2024-04-11 20:22:20,345 - INFO - Starting the server...
+2024-04-11 20:32:31,852 - INFO - Server stopped.
+2024-04-11 20:32:34,324 - INFO - Logging is set up.
+2024-04-11 20:32:35,686 - INFO - Starting the server...
+2024-04-11 20:38:11,813 - INFO - Server stopped.
+2024-04-11 20:38:14,453 - INFO - Logging is set up.
+2024-04-11 20:38:16,200 - INFO - Starting the server...
+2024-04-11 20:46:15,058 - INFO - Server stopped.
+2024-04-11 20:46:16,396 - INFO - Logging is set up.
+2024-04-11 20:46:17,958 - INFO - Starting the server...
+2024-04-11 20:49:44,305 - INFO - Server stopped.
+2024-04-11 20:58:47,792 - INFO - Logging is set up.
+2024-04-11 20:58:49,378 - INFO - Starting the server...
+2024-04-11 21:03:45,615 - INFO - Server stopped.
+2024-04-11 21:03:48,175 - INFO - Logging is set up.
+2024-04-11 21:03:49,663 - INFO - Starting the server...
+2024-04-12 09:39:24,101 - INFO - Logging is set up.
+2024-04-12 09:39:25,526 - INFO - Starting the server...
+2024-04-12 09:39:56,460 - INFO - Server stopped.
+2024-04-12 09:39:59,729 - INFO - Logging is set up.
+2024-04-12 09:40:01,230 - INFO - Starting the server...
+2024-04-12 10:01:15,721 - INFO - Logging is set up.
+2024-04-12 10:03:17,029 - INFO - Logging is set up.
+2024-04-12 10:04:00,367 - INFO - Logging is set up.
+2024-04-12 10:05:26,734 - INFO - Logging is set up.
+2024-04-12 10:10:33,702 - INFO - Logging is set up.
+2024-04-12 10:11:26,178 - INFO - Logging is set up.
+2024-04-12 10:11:49,355 - INFO - Logging is set up.
+2024-04-12 10:12:10,744 - INFO - Logging is set up.
+2024-04-12 10:14:20,499 - INFO - Server stopped.
+2024-04-12 10:14:23,369 - INFO - Logging is set up.
+2024-04-12 10:14:23,370 - INFO - Logging is set up.
+2024-04-12 10:14:23,370 - INFO - Logging is set up.
+2024-04-12 10:19:51,339 - INFO - Logging is set up.
+2024-04-12 10:19:52,736 - INFO - Starting the server...
+2024-04-12 10:28:43,014 - INFO - Server stopped.
+2024-04-12 10:28:45,332 - INFO - Logging is set up.
+2024-04-12 10:28:46,847 - INFO - Starting the server...

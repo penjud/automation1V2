@@ -2,12 +2,14 @@ import requests
 import logging
 import psycopg2
 from psycopg2.extras import RealDictCursor
+from flumine_bf_client import FlumineBetfairClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 SERVER_URL = 'http://localhost:5000'  # Update with the actual server URL if hosted elsewhere
+
 
 class Database:
     def __init__(self, db_params):
