@@ -4,6 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import db
 from sqlalchemy.sql import func
 from datetime import datetime
+from sqlalchemy import Boolean 
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 class Strategy(db.Model):
     __tablename__ = 'strategies'
@@ -56,19 +60,19 @@ class Runner(db.Model):
     updated_at = Column(DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128), unique=True, nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    __tablename__ = 'users'
-    user_id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    password_hash = Column(String, nullable=False)
-    bets = relationship("Bet", back_populates="user")
-    api_usages = relationship("BetfairAPIUsage", back_populates="user")
-    whitelists = relationship("UserIPWhitelist", back_populates="user")
-    created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    
+    # Relationships
+    bets = db.relationship("Bet", back_populates="user")
+    api_usages = db.relationship("BetfairAPIUsage", back_populates="user")
+    whitelists = db.relationship("UserIPWhitelist", back_populates="user")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -76,10 +80,11 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 class UserIPWhitelist(db.Model):
     __tablename__ = 'user_ip_whitelist'
     whitelist_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
     ip_address = Column(String, nullable=False)
     user = relationship("User", back_populates="whitelists")
     created_at = Column(DateTime, default=db.func.current_timestamp())
@@ -88,7 +93,7 @@ class UserIPWhitelist(db.Model):
 class Bet(db.Model):
     __tablename__ = 'bets'
     bet_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
     market_id = Column(Integer, ForeignKey('markets.market_id'))
     runner_id = Column(Integer, ForeignKey('runners.runner_id'))
     user = relationship("User", back_populates="bets")
@@ -98,7 +103,7 @@ class Bet(db.Model):
 class BetfairAPIUsage(db.Model):
     __tablename__ = 'betfair_api_usage'
     usage_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", back_populates="api_usages")
     created_at = Column(DateTime, default=db.func.current_timestamp())
     updated_at = Column(DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
