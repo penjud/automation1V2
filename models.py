@@ -2,9 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import db
-from sqlalchemy.sql import func
 from datetime import datetime
-from sqlalchemy import Boolean 
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()

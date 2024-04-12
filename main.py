@@ -2,7 +2,6 @@ import requests
 import logging
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from flumine_bf_client import FlumineBetfairClient
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

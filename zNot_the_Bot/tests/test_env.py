@@ -2,10 +2,7 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-if load_dotenv():
-    print("Environment variables loaded successfully.")
-else:
-    print("Failed to load environment variables from .env file.")
+load_dotenv()
 
 # Access environment variables
 username = os.getenv('BETFAIR_USERNAME')

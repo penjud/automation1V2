@@ -26,7 +26,7 @@ from __future__ import print_function
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import test
+import test as test
 import os
 from os.path import join, exists, basename, isdir
 import re

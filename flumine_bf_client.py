@@ -153,6 +153,7 @@ def get_betfair_client():
         password = os.getenv('BETFAIR_PASSWORD')
         app_key = os.getenv('BETFAIR_APP_KEY')
         certs_dir = os.getenv('BETFAIR_CERT_PATH')
+        DATABASE_URI = 'postgresql://penjud:#18Hoppy70@localhost/sickpunt'
         return FlumineBetfairClient(username, password, app_key, certs_dir)
     except Exception as e:
         logger.error(f"Failed to initialize Betfair client: {e}")
